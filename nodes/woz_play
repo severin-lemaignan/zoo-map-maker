@@ -23,7 +23,7 @@ class ItemMover(object):
         self._tl = tf.TransformListener()
         rospy.sleep(0.5) # sleep a bit to make sure the TF cache is filled
 
-        self._goal_sub = rospy.Subscriber("sparc/selected_action", PoseStamped, self.on_goal_received)
+        self._goal_sub = rospy.Subscriber("woz/selected_action", PoseStamped, self.on_goal_received)
         self._release_robot_sub = rospy.Subscriber("sandtray/interaction_events", String, self.on_event)
 
         self._motion = actionlib.SimpleActionClient('move_sandbox_items', freeplay_sandbox_msgs.msg.PlaygroundNavigationAction)
@@ -63,7 +63,7 @@ class ItemMover(object):
         self._motion.send_goal(goal)
 
     def on_event(self,msg):
-        if msg.data.startswith("robotreleasing_"):
+        if msg.data.startswith("releasing_"):
             self._moving_item = None
             self.event_release.set()
 
